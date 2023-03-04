@@ -13,10 +13,10 @@ app.get('/', (req: Request, res: Response) => {
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
-    mongoose.connect('mongodb://127.0.0.1:27017/test');
+    mongoose.connect(config.mongoDBUrl);
 
     const Cat = mongoose.model('Cat', { name: String });
 
-    const kitty = new Cat({ name: 'Zildjian' });
+    const kitty = new Cat({ name: 'secondCat' });
     kitty.save().then(() => console.log('meow'));
 });
