@@ -1,6 +1,8 @@
 import { prop } from 'typegoose';
 import { ObjectId } from "bson";
 
+//TODO limit the fields permissions by user degree
+
 class SubTaskSchema {
 
     // TODO: add validation so order is included in the number of subTasks existing for the task

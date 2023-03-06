@@ -1,6 +1,8 @@
 import { prop, Ref } from 'typegoose';
 import TaskSchema from './Task';
 
+//TODO limit the fields permissions by user degree
+
 class UserSchema {
 
     @prop({ required: true })

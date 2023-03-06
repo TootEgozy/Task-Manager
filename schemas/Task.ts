@@ -1,6 +1,8 @@
 import { prop } from 'typegoose';
 import { ObjectId } from "bson";
 
+//TODO limit the fields permissions by user degree
+
 class TaskSchema {
 
    @prop()
