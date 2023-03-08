@@ -1,9 +1,10 @@
 import { prop } from 'typegoose';
 import { ObjectId } from "bson";
+import SubTaskClass from "./SubTask";
 
 //TODO limit the fields permissions by user degree
 
-class TaskSchema {
+class TaskClass {
 
    @prop()
     public userId?: ObjectId;
@@ -24,7 +25,7 @@ class TaskSchema {
     public done?: boolean;
 
    @prop()
-   public subTasks?: string;
+   public subTasks?: SubTaskClass[];
 }
 
-export default TaskSchema;
+export default TaskClass;
