@@ -1,12 +1,12 @@
-import Models from "../types/models";
+import ModelsType from "../types/models.type";
 import {ObjectId} from "bson";
-import {TaskData} from "../types/modelData";
+import {TaskData} from "../types/modelData.type";
 
 export class TaskManager {
 
-    models: Models;
+    models: ModelsType;
 
-    constructor(models: Models) {
+    constructor(models: ModelsType) {
         this.models = models;
     }
 
@@ -20,6 +20,7 @@ export class TaskManager {
             } else {
                 throw new Error('Couldn\'t find user');
             }
+            return newTask._id;
         } catch (e) {
             throw new Error(`Failed to create a new task. ${e.message}`);
         }

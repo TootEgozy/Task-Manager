@@ -1,8 +1,18 @@
-import express, {Request} from 'express';
-import { Response } from 'express-serve-static-core';
+import { Request, Response } from "express";
+import ModelsType from "../types/models.type";
+import ServicesType from "../types/services.type";
 
-export const createTask = (models: any, services: any) => {
-    return (req: Request, res: Response) => {
-        res.send('ok');
+export const createTask = (models: ModelsType, services: ServicesType) => {
+    return async (req: Request, res: Response) => {
+        try {
+            // @ts-ignore
+            const {userId, taskData} = req.body.data;
+            const newTask = await services.TaskManager.createTask(userId, taskData);
+            // @ts-ignore
+            res.send(`New task created! ${newTask._id}`);
+        } catch (e) {
+            // @ts-ignore
+            res.send(e);
+        }
     }
 };
