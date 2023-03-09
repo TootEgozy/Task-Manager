@@ -1,4 +1,4 @@
-import { prop, Ref } from 'typegoose';
+import { prop, Ref } from '@typegoose/typegoose';
 import TaskClass from './Task';
 
 //TODO limit the fields permissions by user degree

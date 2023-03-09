@@ -4,11 +4,14 @@ import ModelsType from "./types/models.type";
 import ServicesType from "./types/services.type";
 import UserClass from "./schemas/User";
 import {TaskManager} from "./services/TaskManager";
-import { getModelForClass } from "@typegoose/typegoose";
+import {buildSchema, getModelForClass, mongoose} from "@typegoose/typegoose";
 import TaskClass from "./schemas/Task";
 import SubTaskClass from "./schemas/SubTask";
+import api from "./api";
+// @ts-ignore
+import { Express } from "express-serve-static-core";
 export class App {
-    public app: Application;
+    public app: Express;
 
     private config: Record<any, any>;
 
@@ -20,7 +23,7 @@ export class App {
         this.app = express();
         this.config = config;
         this.models = {
-            User: getModelForClass(UserClass),
+            User: mongoose.model(buildSchema(UserClass)),
             Task: getModelForClass(TaskClass),
             SubTask: getModelForClass(SubTaskClass),
         };
@@ -30,37 +33,28 @@ export class App {
 
     }
 
-    public async connectToDB() {
-
+    private connectToDB() {
+        return mongoose.connect(config.mongoDBUrl)
+            .then(() => console.log('Connected to MongoDB'))
+            .catch((e) => console.log(`Error connecting to MongoDB: ${e}`));
     }
 
-    public async loadAPIs() {
-
+    private async loadAPIs() {
+        // @ts-ignore
+        this.app.use('/api', api);
     }
 
-    private mountRoutes() {
-        // // Definition of the possible API routes
-        // this.app.route('/users')
-        //     .get((req, res) => {
-        //         var repo = new UserRepository();
-        //         // we catch the result with the typical "then"
-        //         repo.getUsers().then((x) => {
-        //             // .json(x) instead of .send(x) should also be okay
-        //             res.status(200).send(x);
-        //         });
-        //     });
-        //
-        // //               here with parameter
-        // //                      |
-        // //                      v
-        // this.app.route('/users/:id')
-        //     .get((req, res) => {
-        //         var repo = new UserRepository();
-        //
-        //         repo.getUser(req.params.id).then((x) => {
-        //             res.status(200).send(x);
-        //         });
-        //     });
+    public async start() {
+        try {
+            this.app.listen(config.port, () => {
+                console.log(`App listening on port ${config.port}`);
+            });
+            await this.connectToDB();
+            this.loadAPIs();
+        }
+        catch(e) {
+            console.log('error starting app');
+        }
     }
 }
 

@@ -21,7 +21,7 @@ export class TaskManager {
                 throw new Error('Couldn\'t find user');
             }
             return newTask._id;
-        } catch (e) {
+        } catch (e: any) {
             throw new Error(`Failed to create a new task. ${e.message}`);
         }
     }

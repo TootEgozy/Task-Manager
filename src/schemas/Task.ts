@@ -1,4 +1,4 @@
-import { prop } from 'typegoose';
+import { prop } from '@typegoose/typegoose';
 import { ObjectId } from "bson";
 import SubTaskClass from "./SubTask";
 
@@ -12,7 +12,7 @@ class TaskClass {
    @prop({
        required: true,
        validate: {
-           validator: (title) => !!title.length,
+           validator: (title: string) => !!title.length,
            message: 'A task must include a title'
        }
    })

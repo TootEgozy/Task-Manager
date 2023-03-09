@@ -1,4 +1,4 @@
-import { prop } from 'typegoose';
+import { prop } from '@typegoose/typegoose';
 import { ObjectId } from "bson";
 
 //TODO limit the fields permissions by user degree
@@ -13,7 +13,7 @@ order?: number;
 @prop({
     required: true,
     validate: {
-        validator: (title) => !!title.length,
+        validator: (title: string) => !!title.length,
         message: 'A task must include a content'
     }
 })

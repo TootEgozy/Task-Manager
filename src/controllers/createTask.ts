@@ -7,7 +7,7 @@ export const createTask = (models: ModelsType, services: ServicesType) => {
         try {
             // @ts-ignore
             const {userId, taskData} = req.body.data;
-            const newTask = await services.TaskManager.createTask(userId, taskData);
+            const newTask = await services.taskManager.createTask(userId, taskData);
             // @ts-ignore
             res.send(`New task created! ${newTask._id}`);
         } catch (e) {

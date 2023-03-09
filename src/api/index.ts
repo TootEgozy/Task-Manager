@@ -7,5 +7,7 @@ import tasks from "./tasks";
 const router = express.Router();
 
 const api = (models: ModelsType, services: ServicesType) => {
-    router.use('/tasks', tasks)
-}
+    router.use('/tasks', tasks(models, services))
+};
+
+export default api;

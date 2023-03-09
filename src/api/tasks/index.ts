@@ -13,7 +13,7 @@ const tasks = (models: ModelsType, services: ServicesType) => {
     // edit task by id
     // delete task
     // ...same for sub tasks
-    router.use('/', createTask);
+    return router.use('/', createTask(models, services));
 };
 
 export default tasks;
