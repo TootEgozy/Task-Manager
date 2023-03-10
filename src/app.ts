@@ -1,14 +1,13 @@
 import express, {Application} from 'express';
+import {buildSchema, getModelForClass, mongoose} from "@typegoose/typegoose";
 import config from "./config";
 import ModelsType from "./types/models.type";
 import ServicesType from "./types/services.type";
-import UserClass from "./schemas/User";
-import {TaskManager} from "./services/TaskManager";
-import {buildSchema, getModelForClass, mongoose} from "@typegoose/typegoose";
-import TaskClass from "./schemas/Task";
-import SubTaskClass from "./schemas/SubTask";
+import { UserClass } from "./schemas/User";
+import { TaskClass } from "./schemas/Task";
+import { SubTaskClass } from "./schemas/SubTask";
+import { TaskManager } from "./services/TaskManager";
 import api from "./api";
-// @ts-ignore
 import { Express } from "express-serve-static-core";
 export class App {
     public app: Express;
@@ -23,14 +22,13 @@ export class App {
         this.app = express();
         this.config = config;
         this.models = {
-            User: mongoose.model(buildSchema(UserClass)),
+            User: getModelForClass(UserClass),
             Task: getModelForClass(TaskClass),
             SubTask: getModelForClass(SubTaskClass),
         };
         this.services = {
             taskManager: services? services.taskManager : new TaskManager(this.models),
         }
-
     }
 
     private connectToDB() {

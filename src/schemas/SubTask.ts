@@ -1,5 +1,4 @@
-import { prop } from '@typegoose/typegoose';
-import { ObjectId } from "bson";
+import {buildSchema, prop} from '@typegoose/typegoose';
 
 //TODO limit the fields permissions by user degree
 
@@ -23,4 +22,6 @@ public text?: string;
 public done?: boolean;
 }
 
-export default SubTaskClass;
+const SubTaskSchema = buildSchema(SubTaskClass);
+
+export {SubTaskClass, SubTaskSchema};

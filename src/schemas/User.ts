@@ -1,5 +1,5 @@
-import { prop, Ref } from '@typegoose/typegoose';
-import TaskClass from './Task';
+import {buildSchema, prop, Ref} from '@typegoose/typegoose';
+import { TaskClass } from './Task';
 
 //TODO limit the fields permissions by user degree
 
@@ -15,4 +15,6 @@ class UserClass {
     public tasks?: Ref<TaskClass>[];
 }
 
-export default UserClass;
+const UserSchema = buildSchema(UserClass);
+
+export {UserClass, UserSchema};
