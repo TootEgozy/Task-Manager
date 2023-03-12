@@ -1,5 +1,5 @@
 import express, {Application} from 'express';
-import {buildSchema, getModelForClass, mongoose} from "@typegoose/typegoose";
+import {getModelForClass, mongoose} from "@typegoose/typegoose";
 import config from "./config";
 import ModelsType from "./types/models.type";
 import ServicesType from "./types/services.type";
@@ -9,6 +9,7 @@ import { SubTaskClass } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
+
 export class App {
     public app: Express;
 
@@ -38,7 +39,6 @@ export class App {
     }
 
     private async loadAPIs() {
-        // @ts-ignore
         this.app.use('/api', api);
     }
 
