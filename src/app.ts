@@ -1,4 +1,4 @@
-import express, {Application} from 'express';
+import express from 'express';
 import {getModelForClass, mongoose} from "@typegoose/typegoose";
 import config from "./config";
 import ModelsType from "./types/models.type";
@@ -39,7 +39,7 @@ export class App {
     }
 
     private async loadAPIs() {
-        this.app.use('/api', api);
+        this.app.use('/api', api(this.models, this.services));
     }
 
     public async start() {
