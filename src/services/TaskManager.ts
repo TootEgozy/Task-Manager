@@ -25,4 +25,15 @@ export class TaskManager {
             throw new Error(`Failed to create a new task. ${e.message}`);
         }
     }
+
+    getTasks = async (userId: ObjectId) => {
+        try {
+            const userDoc = await this.models.User.findById(userId);
+            if(!userDoc) throw new Error(`Cannot get tasks for not registered user: ${userId}`);
+            const tasks = await this.models.Task.find({ '_id': { $in: userDoc.tasks } });
+            return tasks;
+        } catch(e: any) {
+            throw new Error(`Failed to get tasks. ${e.message}`);
+        }
+    }
 }

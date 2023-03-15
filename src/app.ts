@@ -48,7 +48,7 @@ export class App {
                 console.log(`App listening on port ${config.port}`);
             });
             await this.connectToDB();
-            this.loadAPIs();
+            await this.loadAPIs();
         }
         catch(e) {
             console.log('error starting app');
