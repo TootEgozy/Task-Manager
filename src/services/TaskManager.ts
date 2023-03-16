@@ -1,6 +1,6 @@
 import ModelsType from "../types/models.type";
-import {ObjectId} from "bson";
-import {TaskData} from "../types/modelData.type";
+import { ObjectId } from "bson";
+import { TaskData } from "../types/modelData.type";
 
 export class TaskManager {
 
@@ -24,7 +24,7 @@ export class TaskManager {
         } catch (e: any) {
             throw new Error(`Failed to create a new task. ${e.message}`);
         }
-    }
+    };
 
     getTasks = async (userId: ObjectId) => {
         try {
@@ -34,6 +34,21 @@ export class TaskManager {
             return tasks;
         } catch(e: any) {
             throw new Error(`Failed to get tasks. ${e.message}`);
+        }
+    };
+
+    getTaskById = async (taskId: ObjectId) => {
+        const taskDoc = await this.models.Task.findById(taskId);
+        if(!taskDoc) throw new Error('Task not found');
+        return taskDoc;
+    };
+
+    editTask = async (taskId: ObjectId, options: Partial<TaskData>) => {
+        try {
+            const taskDoc = await this.models.Task.findOneAndUpdate({ _id: taskId }, options, { new: true });
+            return taskDoc;
+        } catch (e) {
+
         }
     }
 }

@@ -1,9 +1,9 @@
 import {buildSchema, prop, Ref} from '@typegoose/typegoose';
-import { TaskClass } from './Task';
+import { Task } from './Task';
 
 //TODO limit the fields permissions by user degree
 
-class UserClass {
+class User {
 
     @prop({ required: true })
     public name?: string;
@@ -11,10 +11,10 @@ class UserClass {
     @prop({ required: true, unique: true })
     public email?: string;
 
-    @prop({ ref: () => TaskClass, default: [] })
-    public tasks?: Ref<TaskClass>[];
+    @prop({ ref: () => Task, default: [] })
+    public tasks?: Ref<Task>[];
 }
 
-const UserSchema = buildSchema(UserClass);
+const UserSchema = buildSchema(User);
 
-export {UserClass, UserSchema};
+export {User, UserSchema};

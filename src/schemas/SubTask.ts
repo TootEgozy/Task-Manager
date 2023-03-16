@@ -2,7 +2,7 @@ import {buildSchema, prop} from '@typegoose/typegoose';
 
 //TODO limit the fields permissions by user degree
 
-class SubTaskClass {
+class SubTask {
 
     // TODO: add validation so order is included in the number of subTasks existing for the task
 // (cannot be order 7 when there are 3 tasks) and unique among the subTasks of the parent task.
@@ -22,6 +22,6 @@ public text?: string;
 public done?: boolean;
 }
 
-const SubTaskSchema = buildSchema(SubTaskClass);
+const SubTaskSchema = buildSchema(SubTask);
 
-export {SubTaskClass, SubTaskSchema};
+export {SubTask, SubTaskSchema};

@@ -3,12 +3,13 @@ import {getModelForClass, mongoose} from "@typegoose/typegoose";
 import config from "./config";
 import ModelsType from "./types/models.type";
 import ServicesType from "./types/services.type";
-import { UserClass } from "./schemas/User";
-import { TaskClass } from "./schemas/Task";
-import { SubTaskClass } from "./schemas/SubTask";
+import { User } from "./schemas/User";
+import { Task } from "./schemas/Task";
+import { SubTask } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
+import {ModelType} from "@typegoose/typegoose/lib/types";
 
 export class App {
     public app: Express;
@@ -23,9 +24,9 @@ export class App {
         this.app = express();
         this.config = config;
         this.models = {
-            User: getModelForClass(UserClass),
-            Task: getModelForClass(TaskClass),
-            SubTask: getModelForClass(SubTaskClass),
+            User: getModelForClass(User),
+            Task: getModelForClass(Task),
+            SubTask: getModelForClass(SubTask),
         };
         this.services = {
             taskManager: services? services.taskManager : new TaskManager(this.models),
@@ -49,6 +50,21 @@ export class App {
             });
             await this.connectToDB();
             await this.loadAPIs();
+
+            const newUser = await new this.models.User({
+                name: 'testUser',
+                email: 'any@gmail.com',
+            }).save();
+            const newTask = await new this.models.Task({
+                userId: newUser._id,
+                title: 'task',
+                details: 'any details',
+                subTasks: [ new this.models.SubTask({
+                    order: 0,
+                    text: 'subtask text',
+                })],
+            }).save();
+            console.log(JSON.stringify(newTask));
         }
         catch(e) {
             console.log('error starting app');

@@ -1,10 +1,10 @@
-import UserClass from "../schemas/User";
-import TaskClass from "../schemas/Task";
-import SubTaskClass from "../schemas/SubTask";
-import mongoose from 'mongoose';
+import { User } from "../schemas/User";
+import { Task } from "../schemas/Task";
+import { SubTask } from "../schemas/SubTask";
+import {ReturnModelType} from "@typegoose/typegoose";
 
 export default interface ModelsType {
-    User: mongoose.Model<UserClass>
-    Task: mongoose.Model<TaskClass>
-    SubTask: mongoose.Model<SubTaskClass>
+    User: ReturnModelType<typeof User>
+    Task: ReturnModelType<typeof Task>
+    SubTask: ReturnModelType<typeof SubTask>
 }
