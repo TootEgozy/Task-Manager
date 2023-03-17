@@ -10,6 +10,7 @@ import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
 import {ModelType} from "@typegoose/typegoose/lib/types";
+import testingDB from "./testingDB";
 
 export class App {
     public app: Express;
@@ -51,20 +52,7 @@ export class App {
             await this.connectToDB();
             await this.loadAPIs();
 
-            const newUser = await new this.models.User({
-                name: 'testUser',
-                email: 'any@gmail.com',
-            }).save();
-            const newTask = await new this.models.Task({
-                userId: newUser._id,
-                title: 'task',
-                details: 'any details',
-                subTasks: [ new this.models.SubTask({
-                    order: 0,
-                    text: 'subtask text',
-                })],
-            }).save();
-            console.log(JSON.stringify(newTask));
+            testingDB(this.models, this.services);
         }
         catch(e) {
             console.log('error starting app');
