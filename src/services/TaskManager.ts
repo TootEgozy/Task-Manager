@@ -10,8 +10,9 @@ export class TaskManager {
         this.models = models;
     }
 
-    createTask = async (userId: ObjectId, taskData: TaskData) => {
+    create = async (userId: ObjectId | string, taskData: TaskData) => {
         try {
+            // TODO: this should happen in task pre-save validation
             const newTask = await new this.models.Task(taskData).save();
             const userDoc = await this.models.User.findById(userId);
             if (userDoc) {
@@ -26,7 +27,7 @@ export class TaskManager {
         }
     };
 
-    getTasks = async (userId: ObjectId) => {
+    getAll = async (userId: ObjectId | string) => {
         try {
             const userDoc = await this.models.User.findById(userId);
             if(!userDoc) throw new Error(`Cannot get tasks for not registered user: ${userId}`);
@@ -37,18 +38,25 @@ export class TaskManager {
         }
     };
 
-    getTaskById = async (taskId: ObjectId) => {
+    getById = async (taskId: ObjectId | string) => {
         const taskDoc = await this.models.Task.findById(taskId);
         if(!taskDoc) throw new Error('Task not found');
         return taskDoc;
     };
 
-    editTask = async (taskId: ObjectId, options: Partial<TaskData>) => {
+    update = async (taskId: ObjectId | string, data: Partial<TaskData>) => {
         try {
-            const taskDoc = await this.models.Task.findOneAndUpdate({ _id: taskId }, options, { new: true });
+            const taskDoc = await this.models.Task.findOneAndUpdate({ _id: taskId }, data, { new: true });
             return taskDoc;
-        } catch (e) {
-
+        } catch (e: any) {
+            throw new Error(`Failed to edit task. ${e.message}`);
         }
+    }
+
+    delete = async (taskId: ObjectId | string)=> {
+        const deleted = await this.models.Task.deleteOne({ _id: taskId }).catch((e: any) => {
+                throw new Error(`Unable to delete task: ${e.message}`);
+            });
+        return deleted;
     }
 }

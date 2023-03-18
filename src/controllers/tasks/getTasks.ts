@@ -6,7 +6,7 @@ export const getTasks = (models: ModelsType, services: ServicesType) => {
     return async (req: Request, res: Response) => {
         try {
             const {userId} = req.body.data;
-            const tasks = await services.taskManager.getTasks(userId);
+            const tasks = await services.taskManager.getAll(userId);
             res.send(tasks);
         } catch (e) {
             res.send(e);

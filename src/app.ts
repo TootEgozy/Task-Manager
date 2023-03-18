@@ -52,10 +52,13 @@ export class App {
             await this.connectToDB();
             await this.loadAPIs();
 
-            testingDB(this.models, this.services);
+           await testingDB(this.models, this.services);
+           const droppedCollections: any[] = [];
+           Object.values(this.models).forEach((model) => droppedCollections.push(model.collection.drop()));
+           await Promise.all(droppedCollections).then(() => console.log('dropped collections'));
         }
-        catch(e) {
-            console.log('error starting app');
+        catch(e: any) {
+            console.log(`Error starting app: ${e.message}`);
         }
     }
 }
