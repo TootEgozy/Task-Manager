@@ -1,12 +1,23 @@
-import {buildSchema, prop} from '@typegoose/typegoose';
-import { ObjectId } from "bson";
-import { SubTask } from "./SubTask";
+import {buildSchema, getModelForClass, prop} from '@typegoose/typegoose';
+import { ObjectId } from 'bson';
+import { User } from './User'
+import { SubTask } from './SubTask';
 
 //TODO limit the fields permissions by user degree
 
 class Task {
 
-   @prop()
+   @prop({
+       required: true,
+       validate: {
+           validator: async (userId: ObjectId) => {
+               const userModel = getModelForClass(User);
+               const userDoc = await userModel.findById(userId);
+               return !!userDoc;
+           },
+           message: 'A task must belong to a user'
+       }
+   })
     public userId?: ObjectId;
 
    @prop({
