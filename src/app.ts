@@ -9,8 +9,6 @@ import { SubTask } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
-import {ModelType} from "@typegoose/typegoose/lib/types";
-import testingDB from "./testingDB";
 
 export class App {
     public app: Express;
@@ -20,6 +18,8 @@ export class App {
     public models: ModelsType;
 
     public services: ServicesType;
+
+    public server: any
 
     constructor(services?: ServicesType) {
         this.app = express();
@@ -41,26 +41,40 @@ export class App {
     }
 
     private async loadAPIs() {
-        this.app.use('/api', api(this.models, this.services));
+        this.app.use('/routes', api(this.models, this.services));
     }
 
     public async start() {
         try {
-            this.app.listen(config.port, () => {
+            this.server = this.app.listen(config.port, () => {
                 console.log(`App listening on port ${config.port}`);
             });
             await this.connectToDB();
             await this.loadAPIs();
-
-           await testingDB(this.models, this.services);
-           const droppedCollections: any[] = [];
-           Object.values(this.models).forEach((model) => droppedCollections.push(model.collection.drop()));
-           await Promise.all(droppedCollections).then(() => console.log('dropped collections'));
+            await new Promise((res) => {
+                setTimeout(res, 3000);
+            });
+            await this.stop();
         }
         catch(e: any) {
             console.log(`Error starting app: ${e.message}`);
         }
     }
+
+    public async stop() {
+        try {
+            const { db } = mongoose.connection;
+            const collections = await db.listCollections().toArray();
+            await Promise.all(
+                collections.map(async (collection) => db.dropCollection(collection.name))
+            ).then(() => console.log('Dropped collections'));
+            await mongoose.connection.close().then(() => console.log('MongoDB connection is closed'));
+            await this.server.close();
+        }
+        catch(e: any) {
+            console.log(`Error stopping app: ${e}`);
+        }
+    }
 }
 
-export default new App().app;
+export default App;
