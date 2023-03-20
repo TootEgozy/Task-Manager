@@ -9,6 +9,7 @@ import { SubTask } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
+import ExpandedError from "./utils/ExpandedError";
 
 export class App {
     public app: Express;
@@ -49,8 +50,10 @@ export class App {
             this.server = this.app.listen(config.port, () => {
                 console.log(`App listening on port ${config.port}`);
             });
-            await this.connectToDB();
-            await this.loadAPIs();
+            await Promise.all([
+                this.connectToDB(),
+                this.loadAPIs(),
+            ]);
             await new Promise((res) => {
                 setTimeout(res, 3000);
             });
@@ -69,7 +72,7 @@ export class App {
                 collections.map(async (collection) => db.dropCollection(collection.name))
             ).then(() => console.log('Dropped collections'));
             await mongoose.connection.close().then(() => console.log('MongoDB connection is closed'));
-            await this.server.close();
+            await this.server.close(() => console.log('HTTP server is closed'));
         }
         catch(e: any) {
             console.log(`Error stopping app: ${e}`);

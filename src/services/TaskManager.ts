@@ -12,16 +12,12 @@ export class TaskManager {
 
     create = async (userId: ObjectId | string, taskData: TaskData) => {
         try {
-            // TODO: this should happen in task pre-save validation
             const newTask = await new this.models.Task(taskData).save();
             const userDoc = await this.models.User.findById(userId);
-            if (userDoc) {
-                userDoc.tasks = userDoc.tasks!.concat(newTask._id);
-                await userDoc.save();
-            } else {
-                throw new Error('Couldn\'t find user');
-            }
-            return newTask._id;
+            if (!userDoc) throw new Error('Couldn\'t find user');
+            userDoc.tasks = userDoc.tasks!.concat(newTask._id);
+            await userDoc.save();
+            return newTask;
         } catch (e: any) {
             throw new Error(`Failed to create a new task. ${e.message}`);
         }
