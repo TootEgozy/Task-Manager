@@ -9,7 +9,7 @@ import { SubTask } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
-import ExpandedError from "./utils/ExpandedError";
+import { ExpandedError } from "./utils/ExpandedError";
 
 export class App {
     public app: Express;
@@ -25,6 +25,8 @@ export class App {
     constructor(services?: ServicesType) {
         this.app = express();
         this.config = config;
+
+
         this.models = {
             User: getModelForClass(User),
             Task: getModelForClass(Task),
@@ -73,9 +75,11 @@ export class App {
             ).then(() => console.log('Dropped collections'));
             await mongoose.connection.close().then(() => console.log('MongoDB connection is closed'));
             await this.server.close(() => console.log('HTTP server is closed'));
+            throw new ExpandedError('TestError', 'error stopping app');
         }
         catch(e: any) {
-            console.log(`Error stopping app: ${e}`);
+            console.log('hello');
+            console.log(e.stack)
         }
     }
 }

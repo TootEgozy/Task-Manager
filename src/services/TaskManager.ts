@@ -1,6 +1,7 @@
 import ModelsType from "../types/models.type";
 import { ObjectId } from "bson";
 import { TaskData } from "../types/modelData.type";
+import {TaskManagerError} from "../utils/ExpandedError";
 
 export class TaskManager {
 
@@ -19,7 +20,7 @@ export class TaskManager {
             await userDoc.save();
             return newTask;
         } catch (e: any) {
-            throw new Error(`Failed to create a new task. ${e.message}`);
+            throw new TaskManagerError(`Failed to create a new task. ${e.stack}`);
         }
     };
 
@@ -30,13 +31,13 @@ export class TaskManager {
             const tasks = await this.models.Task.find({ '_id': { $in: userDoc.tasks } });
             return tasks;
         } catch(e: any) {
-            throw new Error(`Failed to get tasks. ${e.message}`);
+            throw new TaskManagerError(`Failed to get tasks. ${e.stack}`);
         }
     };
 
     getById = async (taskId: ObjectId | string) => {
         const taskDoc = await this.models.Task.findById(taskId);
-        if(!taskDoc) throw new Error('Task not found');
+        if(!taskDoc) throw new TaskManagerError(`Task ${taskId} not found`);
         return taskDoc;
     };
 
@@ -45,13 +46,13 @@ export class TaskManager {
             const taskDoc = await this.models.Task.findOneAndUpdate({ _id: taskId }, data, { new: true });
             return taskDoc;
         } catch (e: any) {
-            throw new Error(`Failed to edit task. ${e.message}`);
+            throw new TaskManagerError(`Failed to edit task. ${e.stack}`);
         }
     }
 
     delete = async (taskId: ObjectId | string)=> {
         const deleted = await this.models.Task.deleteOne({ _id: taskId }).catch((e: any) => {
-                throw new Error(`Unable to delete task: ${e.message}`);
+                throw new TaskManagerError(`Unable to delete task: ${e.stack}`);
             });
         return deleted;
     }

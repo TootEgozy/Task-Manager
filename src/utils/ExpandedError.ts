@@ -8,13 +8,17 @@ class ExpandedError extends Error {
         super(message);
         this.name = name;
     }
+
+
 }
 
-class AppError extends ExpandedError {
-    // constructor(message: string) {
-    //     super('' , message);
-    //     this.name = errorName;
-    // }
+class TaskManagerError extends ExpandedError {
+    constructor(message: string) {
+        super( 'TaskManagerError', message);
+    }
+    createError() {
+
+    }
 }
 
-export default ExpandedError;
+export { ExpandedError, TaskManagerError };

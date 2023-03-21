@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const config = {
-    port: process.env.port || 3000,
+    port: process.env.port || 3001,
     mongoDBUrl: process.env.MONGODB_URL || '',
 };
 
