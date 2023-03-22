@@ -6,13 +6,13 @@ import { Task } from './Task';
 class User {
 
     @prop({ required: true })
-    public name?: string;
+    public name!: string;
 
     @prop({ required: true, unique: true })
-    public email?: string;
+    public email!: string;
 
     @prop({ ref: () => Task, default: [] })
-    public tasks?: Ref<Task>[];
+    public tasks!: Ref<Task>[];
 }
 
 const UserSchema = buildSchema(User);

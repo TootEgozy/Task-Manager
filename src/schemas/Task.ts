@@ -1,7 +1,8 @@
-import {buildSchema, getModelForClass, prop} from '@typegoose/typegoose';
+import { buildSchema, getModelForClass, prop } from '@typegoose/typegoose';
 import { ObjectId } from 'bson';
 import { User } from './User'
 import { SubTask } from './SubTask';
+import { Schema } from 'mongoose'
 
 //TODO limit the fields permissions by user degree
 
@@ -16,29 +17,30 @@ class Task {
                return !!userDoc;
            },
            message: 'A task must belong to a user'
-       }
+       },
+       type: ObjectId,
    })
-    public userId?: ObjectId;
+    public userId!: ObjectId;
 
    @prop({
        required: true,
        validate: {
            validator: (title: string) => !!title.length,
            message: 'A task must include a title'
-       }
+       },
+       type: Schema.Types.String,
    })
-   public title?: string;
+   public title!: string;
+
+   @prop({ type: Schema.Types.String || Schema.Types.Array })
+   public details!: string | string[];
+
+    @prop({ default: false, type: Schema.Types.Boolean })
+    public done!: boolean;
 
    @prop()
-   public details?: string | string[];
-
-    @prop({ default: false })
-    public done?: boolean;
-
-   @prop()
-   public subTasks?: SubTask[];
+   public subTasks!: SubTask[];
 }
 
 const TaskSchema = buildSchema(Task);
-
 export {Task, TaskSchema};
