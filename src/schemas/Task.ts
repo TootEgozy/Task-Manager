@@ -1,10 +1,12 @@
 import { buildSchema, getModelForClass, prop } from '@typegoose/typegoose';
 import { ObjectId } from 'bson';
 import { User } from './User'
-import { SubTask } from './SubTask';
+import { SubTask, SubTaskSchema } from './SubTask';
 import { Schema } from 'mongoose'
 
 //TODO limit the fields permissions by user degree
+
+const subtaskModel = getModelForClass(SubTask);
 
 class Task {
 
@@ -38,8 +40,8 @@ class Task {
     @prop({ default: false, type: Schema.Types.Boolean })
     public done!: boolean;
 
-   @prop()
-   public subTasks!: SubTask[];
+   @prop({ type: () => [SubTask] })
+   public subTasks!: [SubTask: { type: Schema.Types.Subdocument }];
 }
 
 const TaskSchema = buildSchema(Task);
