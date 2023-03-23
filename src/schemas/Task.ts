@@ -1,13 +1,10 @@
 import { buildSchema, getModelForClass, prop } from '@typegoose/typegoose';
 import { ObjectId } from 'bson';
 import { User } from './User'
-import { SubTask, SubTaskSchema } from './SubTask';
+import { SubTask } from './SubTask';
 import { Schema } from 'mongoose'
 
 //TODO limit the fields permissions by user degree
-
-const subtaskModel = getModelForClass(SubTask);
-
 class Task {
 
    @prop({

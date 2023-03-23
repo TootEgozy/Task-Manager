@@ -13,11 +13,11 @@ export class TaskManager {
 
     create = async (userId: ObjectId | string, taskData: TaskData) => {
         try {
-            const newTask = await new this.models.Task(taskData).save();
             const userDoc = await this.models.User.findById(userId);
             if (!userDoc) throw new Error('Couldn\'t find user');
+            const newTask = await new this.models.Task(taskData).save();
             userDoc.tasks = userDoc.tasks!.concat(newTask._id);
-            await userDoc.save();
+            await userDoc.save().catch(async () => await this.models.Task.findByIdAndDelete(newTask._id));
             return newTask;
         } catch (e: any) {
             throw new TaskManagerError(`Failed to create a new task. ${e.stack}`);
