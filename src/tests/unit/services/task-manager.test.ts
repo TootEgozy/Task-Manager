@@ -7,6 +7,7 @@ import { Task } from "../../../schemas/Task";
 import { SubTask } from "../../../schemas/SubTask";
 import sinon from 'sinon';
 import { afterEach } from "mocha";
+import Seeder from "../../utils/seeder";
 
 chai.use(chaiAsPromised);
 
@@ -17,6 +18,7 @@ describe('TaskManager', () => {
     SubTask: getModelForClass(SubTask),
   };
   const taskManager = new TaskManager(models);
+  const seeder = new Seeder(models);
 
   describe('Create task', async () => {
     const sandbox = sinon.createSandbox();
@@ -35,7 +37,7 @@ describe('TaskManager', () => {
 
     it('should create a task', async () => {
       const taskData = { a: 'b' };
-
+      console.log(seeder.seedTask());
     });
 
     it('should fail to create a task if user is undefined', async () => {
