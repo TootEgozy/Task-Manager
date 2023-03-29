@@ -1,7 +1,7 @@
 import express from 'express';
 import {getModelForClass, mongoose} from "@typegoose/typegoose";
 import config from "./config";
-import ModelsType from "./types/models.type";
+import Models from "./types/models";
 import ServicesType from "./types/services.type";
 import { User } from "./schemas/User";
 import { Task } from "./schemas/Task";
@@ -16,7 +16,7 @@ export class App {
 
     private config: Record<any, any>;
 
-    public models: ModelsType;
+    public models: Models;
 
     public services: ServicesType;
 

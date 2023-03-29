@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import ModelsType from "../../types/models.type";
+import Models from "../../types/models";
 import ServicesType from "../../types/services.type";
 
-export const getTasks = (models: ModelsType, services: ServicesType) => {
+export const getTasks = (models: Models, services: ServicesType) => {
     return async (req: Request, res: Response) => {
         try {
             const {userId} = req.body.data;

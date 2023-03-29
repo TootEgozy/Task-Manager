@@ -1,6 +1,6 @@
 import express from 'express';
 import {createTask} from "../../controllers/tasks/createTask";
-import ModelsType from "../../types/models.type";
+import Models from "../../types/models";
 import ServicesType from "../../types/services.type";
 import { Request, Response } from "express-serve-static-core";
 import {getTasks} from "../../controllers/tasks/getTasks";
@@ -9,7 +9,7 @@ import {deleteTask} from "../../controllers/tasks/deleteTask";
 
 const router = express.Router();
 
-const tasks = (models: ModelsType, services: ServicesType) => {
+const tasks = (models: Models, services: ServicesType) => {
     return (req: Request, res: Response) => {
         router.get('/', getTasks(models, services));
         router.post('/', createTask(models, services));

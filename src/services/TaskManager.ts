@@ -1,13 +1,13 @@
-import ModelsType from "../types/models.type";
+import Models from "../types/models";
 import { ObjectId } from "bson";
 import { TaskData } from "../types/modelData.type";
 import {TaskManagerError} from "../utils/ExpandedError";
 
 export class TaskManager {
 
-    models: ModelsType;
+    models: Models;
 
-    constructor(models: ModelsType) {
+    constructor(models: Models) {
         this.models = models;
     }
 
