@@ -28,6 +28,8 @@ describe('TaskManager', () => {
     let userFindByIdStub: sinon.SinonStub;
 
     beforeEach(async() => {
+
+
         taskSaveStub = sinon.stub(models.Task.prototype, 'save');
         userSaveStub = sinon.stub(models.User.prototype, 'save');
         taskFindByIdStub = sinon.stub(models.Task.prototype, 'findById');
