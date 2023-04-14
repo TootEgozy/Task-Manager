@@ -44,22 +44,13 @@ export class App {
     }
 
     private async loadAPIs() {
-        this.app.use('/routes', api(this.models, this.services));
+        this.app.use('/', api(this.models, this.services));
     }
 
     public async start() {
         try {
-            this.server = this.app.listen(config.port, () => {
-                console.log(`App listening on port ${config.port}`);
-            });
-            await Promise.all([
-                this.connectToDB(),
-                this.loadAPIs(),
-            ]);
-            await new Promise((res) => {
-                setTimeout(res, 3000);
-            });
-            await this.stop();
+            this.server = this.app.listen(config.port, () => console.log(`Listening on port ${config.port}`));
+            await Promise.all([this.connectToDB(), this.loadAPIs()]);
         }
         catch(e: any) {
             console.log(`Error starting app: ${e.message}`);
@@ -75,10 +66,8 @@ export class App {
             ).then(() => console.log('Dropped collections'));
             await mongoose.connection.close().then(() => console.log('MongoDB connection is closed'));
             await this.server.close(() => console.log('HTTP server is closed'));
-            throw new ExpandedError('TestError', 'error stopping app');
         }
         catch(e: any) {
-            console.log('hello');
             console.log(e.stack)
         }
     }
