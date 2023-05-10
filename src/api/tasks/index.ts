@@ -2,20 +2,18 @@ import express from 'express';
 import {createTask} from "../../controllers/tasks/createTask";
 import Models from "../../types/models";
 import ServicesType from "../../types/services.type";
-import { Request, Response } from "express-serve-static-core";
 import {getTasks} from "../../controllers/tasks/getTasks";
 import {updateTask} from "../../controllers/tasks/updateTask";
 import {deleteTask} from "../../controllers/tasks/deleteTask";
-
-const router = express.Router();
+import { Request, Response } from "express-serve-static-core";
 
 const tasks = (models: Models, services: ServicesType) => {
-    return (req: Request, res: Response) => {
-        router.get('/', getTasks(models, services));
-        router.post('/', createTask(models, services));
-        router.put('/:id', updateTask(models, services));
-        router.delete('/:id', deleteTask(models, services));
-    }
+    const router = express.Router();
+    router.get('/', getTasks(models, services));
+    router.post('/', createTask(models, services));
+    router.put('/:id', updateTask(models, services));
+    router.delete('/:id', deleteTask(models, services));
+    return router;
 };
 
 export default tasks;

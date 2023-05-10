@@ -25,8 +25,6 @@ export class App {
     constructor(services?: ServicesType) {
         this.app = express();
         this.config = config;
-
-
         this.models = {
             User: getModelForClass(User),
             Task: getModelForClass(Task),
