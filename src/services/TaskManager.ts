@@ -11,9 +11,9 @@ export class TaskManager {
         this.models = models;
     }
 
-    create = async (userId: ObjectId | string, taskData: TaskData) => {
+    create = async (taskData: TaskData) => {
         try {
-            const userDoc = await this.models.User.findById(userId);
+            const userDoc = await this.models.User.findById(taskData.userId);
             if (!userDoc) throw new Error('Couldn\'t find user');
             const newTask = await new this.models.Task(taskData).save();
             userDoc.tasks = userDoc.tasks!.concat(newTask._id);

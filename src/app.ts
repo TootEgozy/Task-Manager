@@ -9,6 +9,7 @@ import { SubTask } from "./schemas/SubTask";
 import { TaskManager } from "./services/TaskManager";
 import api from "./api";
 import { Express } from "express-serve-static-core";
+import * as bodyParser from 'body-parser';
 import { ExpandedError } from "./utils/ExpandedError";
 
 export class App {
@@ -42,6 +43,7 @@ export class App {
     }
 
     private async loadAPIs() {
+        this.app.use(bodyParser.json({ strict: false }));
         this.app.use('/', api(this.models, this.services));
     }
 

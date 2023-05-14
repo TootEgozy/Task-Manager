@@ -5,9 +5,9 @@ import ServicesType from "../../types/services.type";
 export const createTask = (models: Models, services: ServicesType) => {
     return async (req: Request, res: Response) => {
         try {
-            const {userId, taskData} = req.body.data;
-            const newTask = await services.taskManager.create(userId, taskData);
-            res.send(`New task created! ${newTask._id}`);
+            const { taskData } = req.body;
+            const newTask = await services.taskManager.create(taskData);
+            res.send(`New task created! ${JSON.stringify(newTask)}`);
         } catch (e) {
             res.send(e);
         }
