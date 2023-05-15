@@ -5,9 +5,9 @@ import ServicesType from "../../types/services.type";
 export const updateTask = (models: Models, services: ServicesType) => {
     return async (req: Request, res: Response) => {
         try {
-            const { taskId } = req.params;
-            const { data } = req.body.data;
-            const task = await services.taskManager.update(taskId, data);
+            const { id } = req.params;
+            const { data } = req.body;
+            const task = await services.taskManager.update(id, data);
             res.send(task);
         } catch (e) {
             res.send(e);

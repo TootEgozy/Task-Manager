@@ -17,7 +17,7 @@ export class TaskManager {
             if (!userDoc) throw new Error('Couldn\'t find user');
             const newTask = await new this.models.Task(taskData).save();
             userDoc.tasks = userDoc.tasks!.concat(newTask._id);
-            await userDoc.save().catch(async () => await this.models.Task.findByIdAndDelete(newTask._id));
+            const user = await userDoc.save();
             return newTask;
         } catch (e: any) {
             throw new TaskManagerError(`Failed to create a new task. ${e.stack}`);
@@ -28,7 +28,7 @@ export class TaskManager {
         try {
             const userDoc = await this.models.User.findById(userId);
             if(!userDoc) throw new Error(`Cannot get tasks for not registered user: ${userId}`);
-            const tasks = await this.models.Task.find({ '_id': { $in: userDoc.tasks } });
+            const tasks = await this.models.Task.find({ $in: userDoc.tasks });
             return tasks;
         } catch(e: any) {
             throw new TaskManagerError(`Failed to get tasks. ${e.stack}`);
@@ -43,7 +43,7 @@ export class TaskManager {
 
     update = async (taskId: ObjectId | string, data: Partial<TaskData>) => {
         try {
-            const taskDoc = await this.models.Task.findOneAndUpdate({ _id: taskId }, data, { new: true });
+            const taskDoc = await this.models.Task.findByIdAndUpdate(taskId, data, { new: true });
             return taskDoc;
         } catch (e: any) {
             throw new TaskManagerError(`Failed to edit task. ${e.stack}`);
