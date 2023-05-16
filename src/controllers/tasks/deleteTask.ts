@@ -5,9 +5,10 @@ import ServicesType from "../../types/services.type";
 export const deleteTask = (models: Models, services: ServicesType) => {
     return async (req: Request, res: Response) => {
         try {
-            const { taskId } = req.params;
-            const deleted = await services.taskManager.delete(taskId);
-            res.send(deleted);
+            const { id } = req.params;
+            const { userId } = req.body;
+            await services.taskManager.delete(userId, id);
+            res.status(200);
         } catch (e) {
             res.send(e);
         }

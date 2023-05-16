@@ -30,7 +30,7 @@ export class TaskManager {
             if(!userDoc) throw new Error(`Cannot get tasks for not registered user: ${userId}`);
             const tasks = await this.models.Task.find({ $in: userDoc.tasks });
             return tasks;
-        } catch(e: any) {
+        } catch (e: any) {
             throw new TaskManagerError(`Failed to get tasks. ${e.stack}`);
         }
     };
@@ -50,10 +50,16 @@ export class TaskManager {
         }
     }
 
-    delete = async (taskId: ObjectId | string)=> {
-        const deleted = await this.models.Task.deleteOne({ _id: taskId }).catch((e: any) => {
-                throw new TaskManagerError(`Unable to delete task: ${e.stack}`);
-            });
-        return deleted;
+    delete = async (userId: ObjectId, taskId: ObjectId | string)=> {
+        try {
+            const userDoc = await this.models.User.findById(userId);
+            if(!userDoc) throw new Error(`Cannot delete tasks for not registered user: ${userId}`);
+            await this.models.Task.deleteOne({ _id: taskId });
+            const filteredTasks = userDoc.tasks.filter((taskRef) => taskRef.toString() !== taskId);
+            userDoc.tasks = filteredTasks;
+            await userDoc.save();
+        } catch (e: any) {
+            throw new TaskManagerError(`Unable to delete task: ${e.stack}`);
+        }
     }
 }
