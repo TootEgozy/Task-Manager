@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { TaskManager } from "../../../services/TaskManager";
+// @ts-ignore
 import { getModelForClass } from "@typegoose/typegoose";
 import { User } from "../../../schemas/User";
 import { Task } from "../../../schemas/Task";
@@ -28,8 +29,6 @@ describe('TaskManager', () => {
     let userFindByIdStub: sinon.SinonStub;
 
     beforeEach(async() => {
-
-
         taskSaveStub = sinon.stub(models.Task.prototype, 'save');
         userSaveStub = sinon.stub(models.User.prototype, 'save');
         taskFindByIdStub = sinon.stub(models.Task.prototype, 'findById');
